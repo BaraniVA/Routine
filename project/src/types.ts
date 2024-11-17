@@ -11,7 +11,7 @@ export interface Routine {
   id: string;
   title: string;
   description: string;
-  category: 'morning' | 'evening' | 'workout' | 'meditation' | 'custom';
+  category: 'morning' | 'evening' | 'workout' | 'meditation' | 'custom' | string;
   steps: RoutineStep[];
 }
 

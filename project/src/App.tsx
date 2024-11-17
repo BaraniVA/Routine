@@ -19,20 +19,27 @@ function App() {
 
   const fetchRoutines = async () => {
     try {
+      console.log('Fetching routines...');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/routines`);
       if (!response.ok) throw new Error('Failed to fetch routines');
       const data = await response.json();
+      console.log('Fetched routines:', data);
       setRoutines(data);
     } catch (error) {
       console.error('Error fetching routines:', error);
     }
   };
 
-  const handleNewRoutine = async (formData: { title: string; description: string }, steps: { id: string; title: string; duration: number; completed: boolean }[]) => {
+  const handleNewRoutine = async (formData: { title: string; description: string; category?: string }, steps: { id: string; title: string; duration: number; completed: boolean }[] ) => {
+    const category: 'morning' | 'evening' | 'workout' | 'meditation' | 'custom' | string = 
+    formData.category && ['morning', 'evening', 'workout', 'meditation'].includes(formData.category) 
+      ? formData.category 
+      : 'custom'; // Default to 'custom' if no valid category is provided
+
     const newRoutine: Routine = {
       id: crypto.randomUUID(),
       ...formData,
-      category: 'custom', // or any other default category
+      category, 
       steps,
     };
 
@@ -47,6 +54,7 @@ function App() {
       
       if (!response.ok) throw new Error('Failed to create routine');
       const savedRoutine = await response.json();
+      console.log('New routine added:', savedRoutine);
       setRoutines([...routines, savedRoutine]);
     } catch (error) {
       console.error('Error saving routine:', error);
@@ -69,6 +77,7 @@ function App() {
       });
       if (!response.ok) throw new Error('Failed to update routine');
       const savedRoutine = await response.json();
+      console.log('Routine updated:', savedRoutine);
       setRoutines(routines.map(routine => (routine.id === savedRoutine.id ? savedRoutine : routine)));
       setEditingRoutine(null);
       setShowNewRoutineForm(false);

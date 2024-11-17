@@ -36,10 +36,15 @@ const NewRoutineForm: React.FC<NewRoutineFormProps> = ({ routine, onSave, onCanc
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => {
+      if (name === 'category') {
+        console.log(`updating: ${value}`);
+      }
+      return{
+          ...prevState,
+          [name]: value,
+    };
+    });
   };
 
   const handleStepChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
